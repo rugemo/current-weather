@@ -1,8 +1,8 @@
 package com.rumodigi.currentweather.ui.presenter;
 
 import androidx.annotation.NonNull;
-
-import com.rumodigi.currentweather.framework.location.ManageLocation;
+import com.rumodigi.currentweather.framework.location.LocationHandler;
+import com.rumodigi.currentweather.framework.location.LocationResultListener;
 import com.rumodigi.currentweather.ui.view.CurrentWeatherView;
 import java.lang.ref.WeakReference;
 
@@ -12,19 +12,23 @@ import static java.util.Objects.requireNonNull;
 
 public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
     private WeakReference<T> currentWeatherView;
-    private ManageLocation manageLocation;
+    private LocationHandler locationHandler;
 
     @Inject
-    CurrentWeatherPresenter(ManageLocation manageLocation) {
-        this.manageLocation = manageLocation;
+    CurrentWeatherPresenter(LocationHandler locationHandler) {
+        this.locationHandler = locationHandler;
     }
 
     public void onViewCreated(@NonNull final T view) {
         currentWeatherView = new WeakReference<>(requireNonNull(view));
     }
 
+    public void setLocationResultListener(LocationResultListener locationResultListener) {
+        this.locationHandler.setUpLocationCallback(locationResultListener);
+    }
+
     public void refreshWeatherDetails() {
-        manageLocation.updateLocation();
+
         getView().updateTemp("10");
     }
 

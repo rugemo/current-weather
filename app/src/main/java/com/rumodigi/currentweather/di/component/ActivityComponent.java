@@ -1,5 +1,6 @@
 package com.rumodigi.currentweather.di.component;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.rumodigi.currentweather.di.module.ActivityModule;
@@ -14,5 +15,6 @@ import dagger.Component;
 public interface ActivityComponent {
     @ActivityContext
     Context getContext();
+    Activity getActivity();
     void injectMainActivity(MainActivity mainActivity);
 }

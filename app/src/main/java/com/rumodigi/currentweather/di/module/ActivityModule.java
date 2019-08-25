@@ -1,5 +1,6 @@
 package com.rumodigi.currentweather.di.module;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.rumodigi.currentweather.di.qualifier.ActivityContext;
@@ -22,7 +23,7 @@ public class ActivityModule {
 
     @Provides
     @ActivityScope
-    MainActivity providesMainActivity() {
+    Activity providesMainActivity() {
         return mainActivity;
     }
 

@@ -2,6 +2,7 @@ package com.rumodigi.currentweather.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import com.rumodigi.currentweather.CurrentWeatherApplication;
@@ -9,12 +10,13 @@ import com.rumodigi.currentweather.R;
 import com.rumodigi.currentweather.di.component.ActivityComponent;
 import com.rumodigi.currentweather.di.component.DaggerActivityComponent;
 import com.rumodigi.currentweather.di.module.ActivityModule;
+import com.rumodigi.currentweather.framework.location.LocationResultListener;
 import com.rumodigi.currentweather.ui.presenter.CurrentWeatherPresenter;
 import com.rumodigi.currentweather.ui.view.CurrentWeatherView;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity implements CurrentWeatherView {
+public class MainActivity extends AppCompatActivity implements CurrentWeatherView, LocationResultListener {
 
     ActivityComponent activityComponent;
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
         activityComponent.injectMainActivity(this);
 
         currentWeatherPresenter.onViewCreated(this);
+        currentWeatherPresenter.setLocationResultListener(this);
     }
 
     public void onRefreshWeatherClicked() {
@@ -42,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
 
     @Override
     public void updateTemp(String temp) {
+
+    }
+
+    @Override
+    public void setLocation(Location location) {
 
     }
 }
