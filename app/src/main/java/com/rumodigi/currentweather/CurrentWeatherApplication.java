@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.rumodigi.currentweather.di.component.ApplicationComponent;
-
 import com.rumodigi.currentweather.di.component.DaggerApplicationComponent;
 import com.rumodigi.currentweather.di.module.AppModule;
 

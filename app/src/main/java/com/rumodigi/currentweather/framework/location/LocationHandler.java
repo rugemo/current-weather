@@ -30,12 +30,14 @@ import javax.inject.Inject;
 public class LocationHandler {
 
     public static final int LOCATION_REQUEST_CODE = 1000;
+    private static final int GOOGLE_API_ERROR_CODE = 1001;
+    private static final int LOCATION_REQUEST_INTERVAL = 0;
+    private static final int LOCATION_REQUEST_FASTEST_INTERVAL = 0;
 
     private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final int GRANTED = PackageManager.PERMISSION_GRANTED;
-    private final int LOCATION_REQUEST_INTERVAL = 0;
-    private final int LOCATION_REQUEST_FASTEST_INTERVAL = 0;
+
 
     private final Context context;
     private final ActivityComponent activityComponent;
@@ -104,7 +106,7 @@ public class LocationHandler {
         int status = googleApiAvailability.isGooglePlayServicesAvailable(context);
         if (status != ConnectionResult.SUCCESS) {
             if (googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(activityComponent.getActivity(), status, 1001).show();
+                googleApiAvailability.getErrorDialog(activityComponent.getActivity(), status, GOOGLE_API_ERROR_CODE).show();
             }
             return false;
         }

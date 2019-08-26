@@ -1,6 +1,9 @@
-package com.rumodigi.domain.models;
+package com.rumodigi.data.entity;
 
-public class Forecast {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ForecastData {
     private double latitude;
     private double longitude;
     private String timezone;
