@@ -135,8 +135,8 @@ public class LocationHandler {
 
     @SuppressWarnings("MissingPermission")
     private void getLastKnownLocation() {
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
-            Location location = task.getResult();
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(locationTask -> {
+            Location location = locationTask.getResult();
             if (location == null) {
                 fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
             } else {

@@ -39,6 +39,7 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
     }
 
     public void getLocation() {
+        getView().showProgressSpinner();
         this.locationHandler.getUserLocation();
     }
 
@@ -46,16 +47,17 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
         forecastObserver = new DisposableSingleObserver<Forecast>() {
             @Override
             public void onSuccess(Forecast forecast) {
-                //TODO - Update the view with forecast deatils
-                System.out.println("Latitude: " + forecast.getLatitude());
-                System.out.println("Longitude: " + forecast.getLongitude());
-                System.out.println("Timezone: " + forecast.getTimezone());
+                getView().hideErrorMessage();
+                getView().updateTimezone(forecast.getTimezone());
+                getView().updateLatLong(forecast.getLatitude(), forecast.getLongitude());
+                getView().hideProgressSpinner();
             }
 
             @Override
             public void onError(Throwable e) {
-                //TODO - Provide the user with an error message
-                System.out.println("Error " + e.getLocalizedMessage());
+                getView().hideProgressSpinner();
+                getView().showErrorMessage();
+                e.printStackTrace();
             }
         };
         getForecastDetailsUseCase.execute(forecastObserver, location.getLatitude(), location.getLongitude());

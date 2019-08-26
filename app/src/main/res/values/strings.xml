@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Current Weather</string>
+    <string name="timezone">Timezone:</string>
+    <string name="lat_long">Lat/Long:</string>
+    <string name="update_forecast_details">Update Forecast Details</string>
+    <string name="forecase_load_error">We couldn\'t load forecast details right now.\n\nPress \"UPDATE FORECAST DETAILS\" to try again.</string>
+    <string name="lat_long_details">%1$s / %2$s</string>
 </resources>
