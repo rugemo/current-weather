@@ -11,7 +11,7 @@
     tools:context=".ui.MainActivity">
 
     <TextView
-        android:id="@+id/timezoneLabel"
+        android:id="@+id/lastUpdateLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="4dp"
@@ -22,14 +22,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/timezoneDetails"
+        android:id="@+id/lastUpdateDetails"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="4dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/timezoneLabel"
-        app:layout_constraintTop_toTopOf="@+id/timezoneLabel" />
+        app:layout_constraintStart_toEndOf="@+id/lastUpdateLabel"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/latLongLabel"
@@ -40,7 +40,7 @@
         android:text="@string/lat_long"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timezoneLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/lastUpdateDetails" />
 
     <TextView
         android:id="@+id/latLongDetails"
@@ -49,8 +49,97 @@
         android:padding="4dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/latLongLabel"
-        app:layout_constraintTop_toTopOf="@+id/latLongLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/lastUpdateDetails" />
+
+    <TextView
+        android:id="@+id/summaryLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="@string/summary"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/latLongDetails" />
+
+    <TextView
+        android:id="@+id/summaryDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/summaryLabel"
+        app:layout_constraintTop_toBottomOf="@+id/latLongDetails" />
+
+    <TextView
+        android:id="@+id/tempLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="@string/temp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/summaryDetails" />
+
+    <TextView
+        android:id="@+id/tempDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/tempLabel"
+        app:layout_constraintTop_toBottomOf="@+id/summaryDetails" />
+
+    <TextView
+        android:id="@+id/cloudCoverLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="@string/cloudCover"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tempDetails" />
+
+    <TextView
+        android:id="@+id/cloudCoverDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/cloudCoverLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tempDetails" />
+
+    <TextView
+        android:id="@+id/precipitationLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="@string/precipitation"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cloudCoverDetails" />
+
+    <TextView
+        android:id="@+id/precipitationDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/precipitationLabel"
+        app:layout_constraintTop_toBottomOf="@+id/cloudCoverDetails" />
 
     <ProgressBar
         android:id="@+id/progressBar"

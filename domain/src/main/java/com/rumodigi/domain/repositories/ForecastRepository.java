@@ -1,9 +1,9 @@
 package com.rumodigi.domain.repositories;
 
-import com.rumodigi.domain.models.Forecast;
+import com.rumodigi.domain.models.ForecastModel;
 
 import io.reactivex.Single;
 
 public interface ForecastRepository {
-    Single<Forecast> getForecast(double latitude, double longitude);
+    Single<ForecastModel> getForecast(double latitude, double longitude);
 }

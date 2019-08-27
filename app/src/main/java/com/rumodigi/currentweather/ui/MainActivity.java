@@ -16,7 +16,6 @@ import com.rumodigi.currentweather.R;
 import com.rumodigi.currentweather.di.component.ActivityComponent;
 import com.rumodigi.currentweather.di.component.DaggerActivityComponent;
 import com.rumodigi.currentweather.di.module.ActivityModule;
-import com.rumodigi.currentweather.framework.location.LocationHandler;
 import com.rumodigi.currentweather.framework.location.LocationResultListener;
 import com.rumodigi.currentweather.ui.presenter.CurrentWeatherPresenter;
 import com.rumodigi.currentweather.ui.view.CurrentWeatherView;
@@ -34,10 +33,18 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     @Inject
     CurrentWeatherPresenter<MainActivity> currentWeatherPresenter;
 
-    @BindView(R.id.timezoneDetails)
-    TextView timezoneDetails;
+    @BindView(R.id.lastUpdateDetails)
+    TextView lastUpdateDetails;
     @BindView(R.id.latLongDetails)
     TextView latLongDetails;
+    @BindView(R.id.summaryDetails)
+    TextView summaryDetails;
+    @BindView(R.id.tempDetails)
+    TextView tempDetails;
+    @BindView(R.id.precipitationDetails)
+    TextView precipitationDetails;
+    @BindView(R.id.cloudCoverDetails)
+    TextView cloudCoverDetails;
     @BindView(R.id.errorMessage)
     TextView errorMessage;
     @BindView(R.id.progressBar)
@@ -65,22 +72,12 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //TODO - move all logic to the presenter
-        if (requestCode == LocationHandler.LOCATION_REQUEST_CODE) {
-            currentWeatherPresenter.getLocation();
-        }
+        currentWeatherPresenter.permissionResultsRecieved(requestCode);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //TODO - move all logic to the presenter
-        if (requestCode == LocationHandler.LOCATION_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                currentWeatherPresenter.getLocation();
-            } else if (resultCode == RESULT_CANCELED){
-                //TODO - display a message and provide a button to allow access to location services
-            }
-        }
+        currentWeatherPresenter.resultRecieved(requestCode, resultCode);
     }
 
     @OnClick(R.id.updateForecastDetails)
@@ -88,19 +85,48 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
         currentWeatherPresenter.getLocation();
     }
 
-    @Override
-    public void updateTemp(String temp) {
 
+    @Override
+    public void updateTemp(Double temp) {
+        tempDetails.setText(getString(R.string.temp_detail,
+                String.valueOf(temp))
+        );
     }
 
     @Override
-    public void updateTimezone(String timezone) {
-        timezoneDetails.setText(timezone);
+    public void updatePrecipitation(String precipitationChance, String precipitationType) {
+        precipitationDetails.setText(getString(R.string.precipitation_detail,
+                precipitationChance,
+                precipitationType)
+        );
+    }
+
+    @Override
+    public void updateCloudCover(String cloudCover) {
+        cloudCoverDetails.setText(getString(R.string.cloud_cover_details, cloudCover));
+    }
+
+    @Override
+    public void noPrecipitation() {
+        precipitationDetails.setText(getString(R.string.no_preciptation));
+    }
+
+    @Override
+    public void updateDateAndTime(String time) {
+        lastUpdateDetails.setText(time);
     }
 
     @Override
     public void updateLatLong(double latitude, double longitude) {
-        latLongDetails.setText(getString(R.string.lat_long_details, String.valueOf(latitude), String.valueOf(longitude)));
+        latLongDetails.setText(getString(R.string.lat_long_details,
+                String.valueOf(latitude),
+                String.valueOf(longitude))
+        );
+    }
+
+    @Override
+    public void updateSummary(String summary) {
+        summaryDetails.setText(summary);
     }
 
     @Override
@@ -126,8 +152,5 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     @Override
     public void setLocation(Location location) {
         currentWeatherPresenter.refreshWeatherDetails(location);
-        System.out.println("Latitude: " + location.getLatitude());
-        System.out.println("Longitude: " + location.getLongitude());
-
     }
 }

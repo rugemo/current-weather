@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">Current Weather</string>
-    <string name="timezone">Timezone:</string>
+    <string name="timezone">Last Update:</string>
     <string name="lat_long">Lat/Long:</string>
+    <string name="summary">Summary:</string>
+    <string name="temp">Temp:</string>
+    <string name="precipitation">Precipitation:</string>
+    <string name="cloudCover">Coud Cover:</string>
     <string name="update_forecast_details">Update Forecast Details</string>
-    <string name="forecase_load_error">We couldn\'t load forecast details right now.\n\nPress \"UPDATE FORECAST DETAILS\" to try again.</string>
-    <string name="lat_long_details">%1$s / %2$s</string>
+    <string name="forecase_load_error">We couldn\'t load any forecast details right now.\n\nPress \"UPDATE FORECAST DETAILS\" to try again.</string>
+    <string name="temp_detail">%1$s&#x2109;</string>
+    <string name="no_preciptation">None</string>
+    <string name="precipitation_detail">%1$s chance of %2$s.</string>
+    <string name="cloud_cover_details">%1$s</string>
+    <string name="lat_long_details">%1$s/%2$s</string>
 </resources>

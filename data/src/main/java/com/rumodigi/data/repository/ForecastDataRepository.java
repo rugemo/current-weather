@@ -3,7 +3,7 @@ package com.rumodigi.data.repository;
 
 import com.rumodigi.data.datasource.DarkSkyApiDataSource;
 import com.rumodigi.data.entity.mapper.ForecastDataMap;
-import com.rumodigi.domain.models.Forecast;
+import com.rumodigi.domain.models.ForecastModel;
 import com.rumodigi.domain.repositories.ForecastRepository;
 
 import javax.inject.Inject;
@@ -24,7 +24,7 @@ public class ForecastDataRepository implements ForecastRepository {
     }
 
     @Override
-    public Single<Forecast> getForecast(double latitude, double longitude) {
+    public Single<ForecastModel> getForecast(double latitude, double longitude) {
         return darkSkyApiDataSource.getForecast(latitude, longitude).map(this.forecastDataMap :: transform);
     }
 }

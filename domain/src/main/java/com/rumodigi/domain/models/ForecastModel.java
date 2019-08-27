@@ -1,9 +1,9 @@
 package com.rumodigi.domain.models;
 
-public class Forecast {
+public class ForecastModel {
     private double latitude;
     private double longitude;
-    private String timezone;
+    private CurrentlyModel currentlyModel;
 
     public double getLatitude() {
         return latitude;
@@ -21,11 +21,11 @@ public class Forecast {
         this.longitude = longitude;
     }
 
-    public String getTimezone() {
-        return timezone;
+    public CurrentlyModel getCurrentlyModel() {
+        return currentlyModel;
     }
 
-    public void setTimezone(String timezone) {
-        this.timezone = timezone;
+    public void setCurrentlyModel(CurrentlyModel currentlyModel) {
+        this.currentlyModel = currentlyModel;
     }
 }

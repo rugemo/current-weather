@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ForecastData {
     private double latitude;
     private double longitude;
-    private String timezone;
+    private CurrentlyData currently;
 
     public double getLatitude() {
         return latitude;
@@ -24,11 +24,11 @@ public class ForecastData {
         this.longitude = longitude;
     }
 
-    public String getTimezone() {
-        return timezone;
+    public CurrentlyData getCurrently() {
+        return currently;
     }
 
-    public void setTimezone(String timezone) {
-        this.timezone = timezone;
+    public void setCurrently(CurrentlyData currently) {
+        this.currently = currently;
     }
 }
