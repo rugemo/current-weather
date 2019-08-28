@@ -163,16 +163,54 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/retryLocationPermissions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/retry_location_permissions"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/errorMessage"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/background_light"
         android:gravity="center"
-        android:text="@string/forecase_load_error"
         android:textAlignment="center"
         android:visibility="gone"
+        android:text="@string/forecast_load_error"
         app:layout_constraintBottom_toTopOf="@+id/updateForecastDetails"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/retryMessage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/background_light"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:text="@string/forecast_permission_error"
+        app:layout_constraintBottom_toTopOf="@+id/retryLocationPermissions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/gotoSettinsMessage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/background_light"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:text="@string/goto_settings_error"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

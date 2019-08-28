@@ -11,7 +11,7 @@ public abstract class UseCase {
 
     UseCase(PostExecutionThread postExecutionThread){
         this.postExecutionThread = postExecutionThread;
-        compositeDisposable = new CompositeDisposable();
+        this.compositeDisposable = new CompositeDisposable();
     }
 
     public void dispose() {

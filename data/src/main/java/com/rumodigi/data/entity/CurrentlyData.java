@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrentlyData {
 
-    private int time;
+    private long time;
     private String summary;
     private double precipProbability;
     private String precipType;
@@ -13,7 +13,7 @@ public class CurrentlyData {
     private double cloudCover;
 
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
@@ -33,7 +33,7 @@ public class CurrentlyData {
         return cloudCover;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

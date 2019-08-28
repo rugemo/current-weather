@@ -47,10 +47,26 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     TextView cloudCoverDetails;
     @BindView(R.id.errorMessage)
     TextView errorMessage;
+    @BindView(R.id.retryMessage)
+    TextView retryMessage;
+    @BindView(R.id.gotoSettinsMessage)
+    TextView gotoSettinsMessage;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.updateForecastDetails)
     Button updateForecatDeatils;
+    @BindView(R.id.retryLocationPermissions)
+    Button retryLocationPermissions;
+
+    @OnClick(R.id.updateForecastDetails)
+    public void updateForecastDetails(){
+        currentWeatherPresenter.getLocation();
+    }
+
+    @OnClick(R.id.retryLocationPermissions)
+    public void retryLocationPermissions() {
+        currentWeatherPresenter.retryLocation();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,24 +83,23 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
 
         currentWeatherPresenter.onViewCreated(this);
         currentWeatherPresenter.setLocationResultListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         currentWeatherPresenter.getLocation();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        currentWeatherPresenter.permissionResultsRecieved(requestCode);
+        currentWeatherPresenter.permissionResultsReceived(requestCode);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        currentWeatherPresenter.resultRecieved(requestCode, resultCode);
+        currentWeatherPresenter.resultReceived(requestCode, resultCode);
     }
-
-    @OnClick(R.id.updateForecastDetails)
-    public void updateForecastDetails(){
-        currentWeatherPresenter.getLocation();
-    }
-
 
     @Override
     public void updateTemp(Double temp) {
@@ -130,6 +145,26 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     }
 
     @Override
+    public void hideUpdateForecastButton() {
+        updateForecatDeatils.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showUpdateForecastButton() {
+        updateForecatDeatils.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hidePermissionRetryButton() {
+        retryLocationPermissions.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showPermissionRetryButton() {
+        retryLocationPermissions.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showErrorMessage() {
         errorMessage.setVisibility(View.VISIBLE);
     }
@@ -140,6 +175,16 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     }
 
     @Override
+    public void showRetryMessage() {
+        retryMessage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideRetryMessage() {
+        retryMessage.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showProgressSpinner() {
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -147,6 +192,26 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     @Override
     public void hideProgressSpinner() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showGotoSettingsMessage() {
+        gotoSettinsMessage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideGotoSettingsMessage() {
+        gotoSettinsMessage.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void locationPermissionPreviouslyDenied() {
+        currentWeatherPresenter.locationPermissionPreviouslyDenied();
+    }
+
+    @Override
+    public void locationPermissionPreviouslyDeniedWithNeverAskAgain() {
+        currentWeatherPresenter.locationPermissionPreviouslyDeniedWithNeverAskAgain();
     }
 
     @Override

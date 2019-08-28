@@ -7,7 +7,10 @@
     <string name="precipitation">Precipitation:</string>
     <string name="cloudCover">Coud Cover:</string>
     <string name="update_forecast_details">Update Forecast Details</string>
-    <string name="forecase_load_error">We couldn\'t load any forecast details right now.\n\nPress \"UPDATE FORECAST DETAILS\" to try again.</string>
+    <string name="retry_location_permissions">Try Again</string>
+    <string name="forecast_load_error">We couldn\'t load any forecast details right now.\n\nPress \"UPDATE FORECAST DETAILS\" to try again.</string>
+    <string name="forecast_permission_error">Location permission was previously denied.\nPress \"TRY AGAIN\" to grant permission.</string>
+    <string name="goto_settings_error">It\'s not possible to grant location permissions.\nPlease got to settings and grant permission there to continue using app.</string>
     <string name="temp_detail">%1$s&#x2109;</string>
     <string name="no_preciptation">None</string>
     <string name="precipitation_detail">%1$s chance of %2$s.</string>

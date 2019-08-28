@@ -8,8 +8,16 @@ public interface CurrentWeatherView {
     void updateDateAndTime(String time);
     void updateLatLong(double latitude, double longitude);
     void updateSummary(String summary);
+    void hideUpdateForecastButton();
+    void showUpdateForecastButton();
+    void hidePermissionRetryButton();
+    void showPermissionRetryButton();
     void showErrorMessage();
     void hideErrorMessage();
+    void showRetryMessage();
+    void hideRetryMessage();
     void showProgressSpinner();
     void hideProgressSpinner();
+    void showGotoSettingsMessage();
+    void hideGotoSettingsMessage();
 }

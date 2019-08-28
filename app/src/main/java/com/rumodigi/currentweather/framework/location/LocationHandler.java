@@ -1,8 +1,10 @@
 package com.rumodigi.currentweather.framework.location;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -37,7 +39,8 @@ public class LocationHandler {
     private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final int GRANTED = PackageManager.PERMISSION_GRANTED;
-
+    private final String LOCATION_PERMISSION_PREFS = "location_prefs";
+    private String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
 
     private final Context context;
     private final ActivityComponent activityComponent;
@@ -46,6 +49,8 @@ public class LocationHandler {
     private final LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private LocationResultListener locationResultListener;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Inject
     public LocationHandler(ApplicationComponent applicationComponent, ActivityComponent activityComponent) {
@@ -57,6 +62,7 @@ public class LocationHandler {
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(LOCATION_REQUEST_INTERVAL)
                 .setFastestInterval(LOCATION_REQUEST_FASTEST_INTERVAL);
+        this.sharedPreferences = context.getSharedPreferences(LOCATION_PERMISSION_PREFS, Context.MODE_PRIVATE);
     }
 
     public void setUpLocationCallback(LocationResultListener locationResultListener) {
@@ -76,7 +82,18 @@ public class LocationHandler {
             return;
         }
         if (!isPermissionGranted()) {
-            requestPermission();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activityComponent.getActivity(),FINE_LOCATION) &&
+                    ActivityCompat.shouldShowRequestPermissionRationale(activityComponent.getActivity(),COARSE_LOCATION)){
+                locationResultListener.locationPermissionPreviouslyDenied();
+            } else {
+                if (isFirstTimeAskingForPermissions(permissions)) {
+                    firstLocationPermissionRequest(FINE_LOCATION);
+                    firstLocationPermissionRequest(COARSE_LOCATION);
+                    requestPermission();
+                } else {
+                    locationResultListener.locationPermissionPreviouslyDeniedWithNeverAskAgain();
+                }
+            }
             return;
         }
         if (!isLocationEnabled()) {
@@ -96,8 +113,7 @@ public class LocationHandler {
                 ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == GRANTED;
     }
 
-    private void requestPermission() {
-        String[] permissions = {FINE_LOCATION, COARSE_LOCATION};
+    public void requestPermission() {
         ActivityCompat.requestPermissions(activityComponent.getActivity(), permissions, LOCATION_REQUEST_CODE);
     }
 
@@ -143,5 +159,30 @@ public class LocationHandler {
                 locationResultListener.setLocation(location);
             }
         });
+    }
+
+    private boolean isFirstTimeAskingForPermissions(String[] permissions) {
+        return sharedPreferences.getBoolean(permissions[0], true) &&
+                sharedPreferences.getBoolean(permissions[1], true);
+    }
+
+    private void firstLocationPermissionRequest(String permission){
+        editPrefs();
+        editor.putBoolean(permission, false);
+        commitPrefs();
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    private void editPrefs(){
+        if (editor == null) {
+            editor = sharedPreferences.edit();
+        }
+    }
+
+    private void commitPrefs() {
+        if (editor != null) {
+            editor.commit();
+            editor = null;
+        }
     }
 }

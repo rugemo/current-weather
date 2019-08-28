@@ -6,7 +6,7 @@ import io.reactivex.annotations.Nullable;
 public class CurrentlyModel {
 
     @Nullable
-    private int time;
+    private long time;
     @Nullable
     private String summary;
     @Nullable
@@ -19,7 +19,7 @@ public class CurrentlyModel {
     private double cloudCover;
 
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
@@ -43,7 +43,7 @@ public class CurrentlyModel {
         return cloudCover;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

@@ -1,6 +1,7 @@
 package com.rumodigi.currentweather.ui.presenter;
 
 import android.location.Location;
+
 import androidx.annotation.NonNull;
 
 import com.rumodigi.currentweather.framework.location.LocationHandler;
@@ -55,6 +56,10 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
             @Override
             public void onSuccess(ForecastModel forecastModel) {
                 getView().hideErrorMessage();
+                getView().hideRetryMessage();
+                getView().hideGotoSettingsMessage();
+                getView().hidePermissionRetryButton();
+                getView().showUpdateForecastButton();
                 getView().updateDateAndTime(getDateAndTime(forecastModel.getCurrentlyModel().getTime()));
                 getView().updateLatLong(forecastModel.getLatitude(), forecastModel.getLongitude());
                 getView().updateSummary(forecastModel.getCurrentlyModel().getSummary());
@@ -81,13 +86,13 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
         getForecastDetailsUseCase.execute(forecastObserver, location.getLatitude(), location.getLongitude());
     }
 
-    public void permissionResultsRecieved(int requestCode) {
+    public void permissionResultsReceived(int requestCode) {
         if (requestCode == LocationHandler.LOCATION_REQUEST_CODE) {
             getLocation();
         }
     }
 
-    public void resultRecieved(int requestCode, int resultCode) {
+    public void resultReceived(int requestCode, int resultCode) {
         if (requestCode == LocationHandler.LOCATION_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 getLocation();
@@ -96,6 +101,27 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
                 getView().showErrorMessage();
             }
         }
+    }
+
+    public void locationPermissionPreviouslyDenied() {
+        getView().hideProgressSpinner();
+        getView().hideErrorMessage();
+        getView().hideUpdateForecastButton();
+        getView().showRetryMessage();
+        getView().showPermissionRetryButton();
+    }
+
+    public void locationPermissionPreviouslyDeniedWithNeverAskAgain() {
+        getView().hideProgressSpinner();
+        getView().hideErrorMessage();
+        getView().hideRetryMessage();
+        getView().hidePermissionRetryButton();
+        getView().hideUpdateForecastButton();
+        getView().showGotoSettingsMessage();
+    }
+
+    public void retryLocation() {
+        locationHandler.requestPermission();
     }
 
     private static class ViewNotAttachedException extends IllegalStateException {
@@ -110,7 +136,7 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
         return decimalFormat.format(valueToConvert);
     }
 
-    private String getDateAndTime(int timestamp){
+    private String getDateAndTime(long timestamp){
         return new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
                 .format(new Date(timestamp * 1000L));
     }
