@@ -130,7 +130,6 @@ public class CurrentWeatherPresenterTest {
         when(mockCurrentlyModel.getSummary()).thenReturn("Clear");
         when(mockCurrentlyModel.getPrecipType()).thenReturn(null);
         when(mockForecastModel.getCurrentlyModel()).thenReturn(mockCurrentlyModel);
-        observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
         currentWeatherPresenter.refreshWeatherDetails(mockLocation);
         verify(mockGetForecastDetailsUseCase).execute(observerArgumentCaptor.capture(), anyDouble(), anyDouble());
         capturedObserver = observerArgumentCaptor.getValue();
@@ -154,7 +153,6 @@ public class CurrentWeatherPresenterTest {
         when(mockCurrentlyModel.getSummary()).thenReturn("Cloudy");
         when(mockCurrentlyModel.getPrecipType()).thenReturn("Rain");
         when(mockForecastModel.getCurrentlyModel()).thenReturn(mockCurrentlyModel);
-        observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
         currentWeatherPresenter.refreshWeatherDetails(mockLocation);
         verify(mockGetForecastDetailsUseCase).execute(observerArgumentCaptor.capture(), anyDouble(), anyDouble());
         capturedObserver = observerArgumentCaptor.getValue();
@@ -175,7 +173,6 @@ public class CurrentWeatherPresenterTest {
 
     @Test
     public void whenLocationIsNotFound_showErrorMessage(){
-        observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
         currentWeatherPresenter.refreshWeatherDetails(mockLocation);
         verify(mockGetForecastDetailsUseCase).execute(observerArgumentCaptor.capture(), anyDouble(), anyDouble());
         capturedObserver = observerArgumentCaptor.getValue();
