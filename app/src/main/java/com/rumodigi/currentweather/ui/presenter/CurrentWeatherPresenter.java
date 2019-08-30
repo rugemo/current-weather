@@ -68,7 +68,6 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
                     getView().noPrecipitation();
                 } else {
                     getView().updatePrecipitation(
-                            getPercentageFromDouble(forecastModel.getCurrentlyModel().getPrecipProbability()),
                             forecastModel.getCurrentlyModel().getPrecipType()
                     );
                 }

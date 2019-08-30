@@ -13,7 +13,6 @@
     <string name="goto_settings_error">It\'s not possible to grant location permissions.\nPlease got to settings and grant permission there to continue using app.</string>
     <string name="temp_detail">%1$s&#x2109;</string>
     <string name="no_preciptation">None</string>
-    <string name="precipitation_detail">%1$s chance of %2$s.</string>
     <string name="cloud_cover_details">%1$s</string>
     <string name="lat_long_details">%1$s/%2$s</string>
 </resources>

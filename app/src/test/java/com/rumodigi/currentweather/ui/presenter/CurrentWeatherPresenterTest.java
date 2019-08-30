@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -34,6 +35,7 @@ public class CurrentWeatherPresenterTest {
     private CurrentWeatherPresenter<CurrentWeatherView> currentWeatherPresenter;
     private double latitude = 55.8685531;
     private double longitude = -4.2635288;
+    private DisposableSingleObserver<ForecastModel> capturedObserver;
 
     @Mock
     LocationHandler mockLocationHandler;
@@ -49,7 +51,8 @@ public class CurrentWeatherPresenterTest {
     ForecastModel mockForecastModel;
     @Mock
     CurrentlyModel mockCurrentlyModel;
-
+    @Captor
+    ArgumentCaptor<DisposableSingleObserver<ForecastModel>> observerArgumentCaptor;
 
     @Before
     public void setUp() {
@@ -127,10 +130,10 @@ public class CurrentWeatherPresenterTest {
         when(mockCurrentlyModel.getSummary()).thenReturn("Clear");
         when(mockCurrentlyModel.getPrecipType()).thenReturn(null);
         when(mockForecastModel.getCurrentlyModel()).thenReturn(mockCurrentlyModel);
-        final ArgumentCaptor<DisposableSingleObserver> observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
+        observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
         currentWeatherPresenter.refreshWeatherDetails(mockLocation);
         verify(mockGetForecastDetailsUseCase).execute(observerArgumentCaptor.capture(), anyDouble(), anyDouble());
-        DisposableSingleObserver capturedObserver = observerArgumentCaptor.getValue();
+        capturedObserver = observerArgumentCaptor.getValue();
         capturedObserver.onSuccess(mockForecastModel);
         verify(mockCurrentWeatherView).hideErrorMessage();
         verify(mockCurrentWeatherView).hideRetryMessage();
@@ -151,10 +154,10 @@ public class CurrentWeatherPresenterTest {
         when(mockCurrentlyModel.getSummary()).thenReturn("Cloudy");
         when(mockCurrentlyModel.getPrecipType()).thenReturn("Rain");
         when(mockForecastModel.getCurrentlyModel()).thenReturn(mockCurrentlyModel);
-        final ArgumentCaptor<DisposableSingleObserver> observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
+        observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
         currentWeatherPresenter.refreshWeatherDetails(mockLocation);
         verify(mockGetForecastDetailsUseCase).execute(observerArgumentCaptor.capture(), anyDouble(), anyDouble());
-        DisposableSingleObserver capturedObserver = observerArgumentCaptor.getValue();
+        capturedObserver = observerArgumentCaptor.getValue();
         capturedObserver.onSuccess(mockForecastModel);
         verify(mockCurrentWeatherView).hideErrorMessage();
         verify(mockCurrentWeatherView).hideRetryMessage();
@@ -165,17 +168,17 @@ public class CurrentWeatherPresenterTest {
         verify(mockCurrentWeatherView).updateLatLong(anyDouble(), anyDouble());
         verify(mockCurrentWeatherView).updateSummary(anyString());
         verify(mockCurrentWeatherView).updateTemp(anyDouble());
-        verify(mockCurrentWeatherView).updatePrecipitation(anyString(), anyString());
+        verify(mockCurrentWeatherView).updatePrecipitation(anyString());
         verify(mockCurrentWeatherView).updateCloudCover(anyString());
         verify(mockCurrentWeatherView).hideProgressSpinner();
     }
 
     @Test
     public void whenLocationIsNotFound_showErrorMessage(){
-        final ArgumentCaptor<DisposableSingleObserver> observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
+        observerArgumentCaptor = ArgumentCaptor.forClass(DisposableSingleObserver.class);
         currentWeatherPresenter.refreshWeatherDetails(mockLocation);
         verify(mockGetForecastDetailsUseCase).execute(observerArgumentCaptor.capture(), anyDouble(), anyDouble());
-        DisposableSingleObserver capturedObserver = observerArgumentCaptor.getValue();
+        capturedObserver = observerArgumentCaptor.getValue();
         capturedObserver.onError(new Throwable());
         verify(mockCurrentWeatherView).hideProgressSpinner();
         verify(mockCurrentWeatherView).showErrorMessage();

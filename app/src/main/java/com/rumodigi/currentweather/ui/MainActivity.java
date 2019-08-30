@@ -109,11 +109,8 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     }
 
     @Override
-    public void updatePrecipitation(String precipitationChance, String precipitationType) {
-        precipitationDetails.setText(getString(R.string.precipitation_detail,
-                precipitationChance,
-                precipitationType)
-        );
+    public void updatePrecipitation(String precipitationType) {
+        precipitationDetails.setText(precipitationType);
     }
 
     @Override
