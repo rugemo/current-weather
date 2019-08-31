@@ -77,38 +77,22 @@ public class LocationHandler {
         };
     }
 
-    public void getUserLocation() {
-        if (!isGooglePlayServicesAvailable()){
-            return;
-        }
-        if (!isPermissionGranted()) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activityComponent.getActivity(),FINE_LOCATION) &&
-                    ActivityCompat.shouldShowRequestPermissionRationale(activityComponent.getActivity(),COARSE_LOCATION)){
-                locationResultListener.locationPermissionPreviouslyDenied();
-            } else {
-                if (isFirstTimeAskingForPermissions(permissions)) {
-                    firstLocationPermissionRequest(FINE_LOCATION);
-                    firstLocationPermissionRequest(COARSE_LOCATION);
-                    requestPermission();
-                } else {
-                    locationResultListener.locationPermissionPreviouslyDeniedWithNeverAskAgain();
-                }
-            }
-            return;
-        }
-        if (!isLocationEnabled()) {
-            promptUserToEnableLocation();
-            return;
-        }
-        getLastKnownLocation();
+    public void permissionsFirstRequest() {
+        firstLocationPermissionRequest(FINE_LOCATION);
+        firstLocationPermissionRequest(COARSE_LOCATION);
     }
 
-    private boolean isLocationEnabled() {
+    public boolean hasLocationPermissionBeenDeniedPreviously() {
+        return ActivityCompat.shouldShowRequestPermissionRationale(activityComponent.getActivity(),FINE_LOCATION) &&
+                ActivityCompat.shouldShowRequestPermissionRationale(activityComponent.getActivity(),COARSE_LOCATION);
+    }
+
+    public boolean isLocationEnabled() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    private boolean isPermissionGranted() {
+    public boolean isPermissionGranted() {
         return ContextCompat.checkSelfPermission(context, FINE_LOCATION) == GRANTED &&
                 ContextCompat.checkSelfPermission(context, COARSE_LOCATION) == GRANTED;
     }
@@ -117,7 +101,7 @@ public class LocationHandler {
         ActivityCompat.requestPermissions(activityComponent.getActivity(), permissions, LOCATION_REQUEST_CODE);
     }
 
-    private boolean isGooglePlayServicesAvailable() {
+    public boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int status = googleApiAvailability.isGooglePlayServicesAvailable(context);
         if (status != ConnectionResult.SUCCESS) {
@@ -129,7 +113,7 @@ public class LocationHandler {
         return true;
     }
 
-    private void promptUserToEnableLocation() {
+    public void promptUserToEnableLocation() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
         LocationServices
@@ -150,7 +134,7 @@ public class LocationHandler {
     }
 
     @SuppressWarnings("MissingPermission")
-    private void getLastKnownLocation() {
+    public void getLastKnownLocation() {
         fusedLocationProviderClient.getLastLocation().addOnCompleteListener(locationTask -> {
             Location location = locationTask.getResult();
             if (location == null) {
@@ -161,7 +145,7 @@ public class LocationHandler {
         });
     }
 
-    private boolean isFirstTimeAskingForPermissions(String[] permissions) {
+    public boolean isFirstTimeAskingForPermissions() {
         return sharedPreferences.getBoolean(permissions[0], true) &&
                 sharedPreferences.getBoolean(permissions[1], true);
     }

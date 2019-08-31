@@ -47,7 +47,27 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
     public void getLocation() {
         getView().hideErrorMessage();
         getView().showProgressSpinner();
-        this.locationHandler.getUserLocation();
+        if (!locationHandler.isGooglePlayServicesAvailable()) {
+            getView().hideProgressSpinner();
+            getView().showErrorMessage();
+            return;
+        }
+        if (!locationHandler.isPermissionGranted()) {
+            if (locationHandler.hasLocationPermissionBeenDeniedPreviously()) {
+                locationPermissionPreviouslyDenied();
+            } else if (locationHandler.isFirstTimeAskingForPermissions()) {
+                locationHandler.permissionsFirstRequest();
+                locationHandler.requestPermission();
+            } else {
+                locationPermissionPreviouslyDeniedWithNeverAskAgain();
+            }
+            return;
+        }
+        if (!locationHandler.isLocationEnabled()) {
+            locationHandler.promptUserToEnableLocation();
+            return;
+        }
+        locationHandler.getLastKnownLocation();
     }
 
     public void refreshWeatherDetails(Location location) {
@@ -102,7 +122,7 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
         }
     }
 
-    public void locationPermissionPreviouslyDenied() {
+    private void locationPermissionPreviouslyDenied() {
         getView().hideProgressSpinner();
         getView().hideErrorMessage();
         getView().hideUpdateForecastButton();
@@ -110,7 +130,7 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
         getView().showPermissionRetryButton();
     }
 
-    public void locationPermissionPreviouslyDeniedWithNeverAskAgain() {
+    private void locationPermissionPreviouslyDeniedWithNeverAskAgain() {
         getView().hideProgressSpinner();
         getView().hideErrorMessage();
         getView().hideRetryMessage();
@@ -119,7 +139,7 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
         getView().showGotoSettingsMessage();
     }
 
-    public void retryLocation() {
+    public void retryLocationPermissionRequest() {
         locationHandler.requestPermission();
     }
 

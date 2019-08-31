@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
 
     @OnClick(R.id.retryLocationPermissions)
     public void retryLocationPermissions() {
-        currentWeatherPresenter.retryLocation();
+        currentWeatherPresenter.retryLocationPermissionRequest();
     }
 
     @Override
@@ -199,16 +199,6 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     @Override
     public void hideGotoSettingsMessage() {
         gotoSettinsMessage.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void locationPermissionPreviouslyDenied() {
-        currentWeatherPresenter.locationPermissionPreviouslyDenied();
-    }
-
-    @Override
-    public void locationPermissionPreviouslyDeniedWithNeverAskAgain() {
-        currentWeatherPresenter.locationPermissionPreviouslyDeniedWithNeverAskAgain();
     }
 
     @Override

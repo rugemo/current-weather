@@ -25,6 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -68,19 +69,75 @@ public class CurrentWeatherPresenterTest {
     }
 
     @Test
-    public void whenGetLocationIsCalled_checkThatLocationHandlerIsActioned(){
+    public void whenGooglePlayServicesIsNotAvailable_confirmErrorMessageIsShown(){
+        when(mockLocationHandler.isGooglePlayServicesAvailable()).thenReturn(false);
         currentWeatherPresenter.getLocation();
         verify(mockCurrentWeatherView).hideErrorMessage();
         verify(mockCurrentWeatherView).showProgressSpinner();
-        verify(mockLocationHandler).getUserLocation();
+        verify(mockCurrentWeatherView).hideProgressSpinner();
+        verify(mockCurrentWeatherView).showErrorMessage();
+    }
+
+
+    @Test
+    public void whenItsTheFirstTimeAskingForPermissions_checkThatPermissionIsRequested(){
+        when(mockLocationHandler.isGooglePlayServicesAvailable()).thenReturn(true);
+        when(mockLocationHandler.isPermissionGranted()).thenReturn(false);
+        when(mockLocationHandler.hasLocationPermissionBeenDeniedPreviously()).thenReturn(false);
+        when(mockLocationHandler.isFirstTimeAskingForPermissions()).thenReturn(true);
+        currentWeatherPresenter.getLocation();
+        verify(mockCurrentWeatherView).hideErrorMessage();
+        verify(mockCurrentWeatherView).showProgressSpinner();
+        verify(mockLocationHandler).permissionsFirstRequest();
+        verify(mockLocationHandler).requestPermission();
     }
 
     @Test
-    public void whenCorrectPermissionReceived_locationIsRequested(){
-        currentWeatherPresenter.permissionResultsReceived(LocationHandler.LOCATION_REQUEST_CODE);
-        verify(mockCurrentWeatherView).hideErrorMessage();
+    public void whenPermissionHasBeenDeniedPreviously_checkThatRetryOptionIsPresented(){
+        when(mockLocationHandler.isGooglePlayServicesAvailable()).thenReturn(true);
+        when(mockLocationHandler.isPermissionGranted()).thenReturn(false);
+        when(mockLocationHandler.hasLocationPermissionBeenDeniedPreviously()).thenReturn(true);
+        currentWeatherPresenter.getLocation();
+        verify(mockCurrentWeatherView, times(2)).hideErrorMessage();
         verify(mockCurrentWeatherView).showProgressSpinner();
-        verify(mockLocationHandler).getUserLocation();
+        verify(mockCurrentWeatherView).hideProgressSpinner();
+        verify(mockCurrentWeatherView).hideUpdateForecastButton();
+        verify(mockCurrentWeatherView).showRetryMessage();
+        verify(mockCurrentWeatherView).showPermissionRetryButton();
+    }
+
+    @Test
+    public void whenPermissionHasBeenDeniedPreviouslyWithNeverAskForAgainChecked_checkThatGotoSettingsInfoIsPresented(){
+        when(mockLocationHandler.isGooglePlayServicesAvailable()).thenReturn(true);
+        when(mockLocationHandler.isPermissionGranted()).thenReturn(false);
+        when(mockLocationHandler.hasLocationPermissionBeenDeniedPreviously()).thenReturn(false);
+        when(mockLocationHandler.isFirstTimeAskingForPermissions()).thenReturn(false);
+        currentWeatherPresenter.getLocation();
+        verify(mockCurrentWeatherView, times(2)).hideErrorMessage();
+        verify(mockCurrentWeatherView).showProgressSpinner();
+        verify(mockCurrentWeatherView).hideProgressSpinner();
+        verify(mockCurrentWeatherView).hideUpdateForecastButton();
+        verify(mockCurrentWeatherView).hideRetryMessage();
+        verify(mockCurrentWeatherView).hidePermissionRetryButton();
+        verify(mockCurrentWeatherView).showGotoSettingsMessage();
+    }
+
+    @Test
+    public void whenLocationIsDisabled_askUserToEnableLocation(){
+        when(mockLocationHandler.isGooglePlayServicesAvailable()).thenReturn(true);
+        when(mockLocationHandler.isPermissionGranted()).thenReturn(true);
+        when(mockLocationHandler.isLocationEnabled()).thenReturn(false);
+        currentWeatherPresenter.getLocation();
+        verify(mockLocationHandler).promptUserToEnableLocation();
+    }
+
+    @Test
+    public void whenLocationIsEnabled_getUsersLocation(){
+        when(mockLocationHandler.isGooglePlayServicesAvailable()).thenReturn(true);
+        when(mockLocationHandler.isPermissionGranted()).thenReturn(true);
+        when(mockLocationHandler.isLocationEnabled()).thenReturn(true);
+        currentWeatherPresenter.getLocation();
+        verify(mockLocationHandler).getLastKnownLocation();
     }
 
     @Test
@@ -92,9 +149,9 @@ public class CurrentWeatherPresenterTest {
     @Test
     public void whenLocationServicesIsGranted_locationIsRequested(){
         currentWeatherPresenter.resultReceived(LocationHandler.LOCATION_REQUEST_CODE, Activity.RESULT_OK);
-        verify(mockCurrentWeatherView).hideErrorMessage();
         verify(mockCurrentWeatherView).showProgressSpinner();
-        verify(mockLocationHandler).getUserLocation();
+        verify(mockCurrentWeatherView).hideProgressSpinner();
+//        verify(mockLocationHandler).getUserLocation();
     }
 
     @Test
@@ -102,27 +159,6 @@ public class CurrentWeatherPresenterTest {
         currentWeatherPresenter.resultReceived(LocationHandler.LOCATION_REQUEST_CODE, Activity.RESULT_CANCELED);
         verify(mockCurrentWeatherView).showErrorMessage();
         verify(mockCurrentWeatherView).hideProgressSpinner();
-    }
-
-    @Test
-    public void whenPermissionHasBeenDeniedBefore_showRetryMessageAndRetryButton(){
-        currentWeatherPresenter.locationPermissionPreviouslyDenied();
-        verify(mockCurrentWeatherView).hideProgressSpinner();
-        verify(mockCurrentWeatherView).hideErrorMessage();
-        verify(mockCurrentWeatherView).hideUpdateForecastButton();
-        verify(mockCurrentWeatherView).showRetryMessage();
-        verify(mockCurrentWeatherView).showPermissionRetryButton();
-    }
-
-    @Test
-    public void whenPermissionHasBeenDeniedBeforeWithNeverAskAgain_showGotoSettingsMessage(){
-        currentWeatherPresenter.locationPermissionPreviouslyDeniedWithNeverAskAgain();
-        verify(mockCurrentWeatherView).hideProgressSpinner();
-        verify(mockCurrentWeatherView).hideErrorMessage();
-        verify(mockCurrentWeatherView).hideUpdateForecastButton();
-        verify(mockCurrentWeatherView).hidePermissionRetryButton();
-        verify(mockCurrentWeatherView).hideUpdateForecastButton();
-        verify(mockCurrentWeatherView).showGotoSettingsMessage();
     }
 
     @Test
@@ -179,5 +215,11 @@ public class CurrentWeatherPresenterTest {
         capturedObserver.onError(new Throwable());
         verify(mockCurrentWeatherView).hideProgressSpinner();
         verify(mockCurrentWeatherView).showErrorMessage();
+    }
+
+    @Test
+    public void whenRetryLocationIsRequested_confirmPermissionIsRequested(){
+        currentWeatherPresenter.retryLocationPermissionRequest();
+        verify(mockLocationHandler).requestPermission();
     }
 }
