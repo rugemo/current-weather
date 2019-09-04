@@ -4,6 +4,7 @@ public class ForecastModel {
     private double latitude;
     private double longitude;
     private CurrentlyModel currentlyModel;
+    private HourlyModel hourlyModel;
 
     public double getLatitude() {
         return latitude;
@@ -27,5 +28,13 @@ public class ForecastModel {
 
     public void setCurrentlyModel(CurrentlyModel currentlyModel) {
         this.currentlyModel = currentlyModel;
+    }
+
+    public HourlyModel getHourlyModel() {
+        return hourlyModel;
+    }
+
+    public void setHourlyModel(HourlyModel hourlyModel) {
+        this.hourlyModel = hourlyModel;
     }
 }

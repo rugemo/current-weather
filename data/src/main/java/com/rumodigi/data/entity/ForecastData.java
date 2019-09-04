@@ -7,6 +7,7 @@ public class ForecastData {
     private double latitude;
     private double longitude;
     private CurrentlyData currently;
+    private HourlyData hourly;
 
     public double getLatitude() {
         return latitude;
@@ -30,5 +31,13 @@ public class ForecastData {
 
     public void setCurrently(CurrentlyData currently) {
         this.currently = currently;
+    }
+
+    public HourlyData getHourly() {
+        return hourly;
+    }
+
+    public void setHourly(HourlyData hourly) {
+        this.hourly = hourly;
     }
 }

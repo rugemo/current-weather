@@ -2,8 +2,10 @@ package com.rumodigi.data.entity.mapper;
 
 import com.rumodigi.data.entity.CurrentlyData;
 import com.rumodigi.data.entity.ForecastData;
+import com.rumodigi.data.entity.HourlyData;
 import com.rumodigi.domain.models.CurrentlyModel;
 import com.rumodigi.domain.models.ForecastModel;
+import com.rumodigi.domain.models.HourlyModel;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -21,6 +23,7 @@ public class ForecastDataMap {
             forecastModel.setLatitude(forecastData.getLatitude());
             forecastModel.setLongitude(forecastData.getLongitude());
             forecastModel.setCurrentlyModel(transformCurrentlyData(forecastData.getCurrently()));
+            forecastModel.setHourlyModel(transformHourlyData(forecastData.getHourly()));
         }
         return forecastModel;
     }
@@ -37,5 +40,14 @@ public class ForecastDataMap {
             currentlyModel.setCloudCover(currentlyData.getCloudCover());
         }
         return currentlyModel;
+    }
+
+    private HourlyModel transformHourlyData(HourlyData hourlyData) {
+         HourlyModel hourlyModel = null;
+         if (hourlyData != null) {
+             hourlyModel = new HourlyModel();
+             hourlyModel.setData(hourlyData.getData());
+         }
+         return hourlyModel;
     }
 }
