@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.rumodigi.currentweather.CurrentWeatherApplication;
 import com.rumodigi.currentweather.R;
@@ -17,8 +19,12 @@ import com.rumodigi.currentweather.di.component.ActivityComponent;
 import com.rumodigi.currentweather.di.component.DaggerActivityComponent;
 import com.rumodigi.currentweather.di.module.ActivityModule;
 import com.rumodigi.currentweather.framework.location.LocationResultListener;
+import com.rumodigi.currentweather.ui.adapter.HourlyListAdapter;
 import com.rumodigi.currentweather.ui.presenter.CurrentWeatherPresenter;
 import com.rumodigi.currentweather.ui.view.CurrentWeatherView;
+import com.rumodigi.domain.models.HourlyModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,6 +35,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements CurrentWeatherView, LocationResultListener {
 
     ActivityComponent activityComponent;
+    HourlyListAdapter adapter;
 
     @Inject
     CurrentWeatherPresenter<MainActivity> currentWeatherPresenter;
@@ -51,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     TextView retryMessage;
     @BindView(R.id.gotoSettinsMessage)
     TextView gotoSettinsMessage;
+    @BindView(R.id.hourlyDataList)
+    RecyclerView hourlyDataList;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.updateForecastDetails)
@@ -83,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
 
         currentWeatherPresenter.onViewCreated(this);
         currentWeatherPresenter.setLocationResultListener(this);
+        hourlyDataList.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new HourlyListAdapter();
+        hourlyDataList.setAdapter(adapter);
     }
 
     @Override
@@ -104,8 +116,7 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     @Override
     public void updateTemp(Double temp) {
         tempDetails.setText(getString(R.string.temp_detail,
-                String.valueOf(temp))
-        );
+                String.valueOf(temp)));
     }
 
     @Override
@@ -116,6 +127,11 @@ public class MainActivity extends AppCompatActivity implements CurrentWeatherVie
     @Override
     public void updateCloudCover(String cloudCover) {
         cloudCoverDetails.setText(getString(R.string.cloud_cover_details, cloudCover));
+    }
+
+    @Override
+    public void updateHourlyData(HourlyModel hourlyModel) {
+        adapter.setData(hourlyModel);
     }
 
     @Override

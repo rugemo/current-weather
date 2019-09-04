@@ -3,13 +3,13 @@ package com.rumodigi.domain.models;
 import java.util.List;
 
 public class HourlyModel {
-    private List<Object> data;
+    private List<HourlyForecastModel> data;
 
-    public List<Object> getData() {
+    public List<HourlyForecastModel> getData() {
         return data;
     }
 
-    public void setData(List<Object> data) {
+    public void setData(List<HourlyForecastModel> data) {
         this.data = data;
     }
 }

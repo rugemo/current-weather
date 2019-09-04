@@ -72,6 +72,7 @@ public class CurrentWeatherPresenter<T extends CurrentWeatherView> {
                     );
                 }
                 getView().updateCloudCover(getPercentageFromDouble(forecastModel.getCurrentlyModel().getCloudCover()));
+                getView().updateHourlyData(forecastModel.getHourlyModel());
                 getView().hideProgressSpinner();
             }
 

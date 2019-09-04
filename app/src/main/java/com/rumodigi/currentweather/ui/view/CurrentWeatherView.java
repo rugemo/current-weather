@@ -1,9 +1,14 @@
 package com.rumodigi.currentweather.ui.view;
 
+import com.rumodigi.domain.models.HourlyModel;
+
+import java.util.List;
+
 public interface CurrentWeatherView {
     void updateTemp(Double temp);
     void updatePrecipitation(String precipitationType);
     void updateCloudCover(String cloudCover);
+    void updateHourlyData(HourlyModel hourlyModel);
     void noPrecipitation();
     void updateDateAndTime(String time);
     void updateLatLong(double latitude, double longitude);

@@ -3,9 +3,15 @@ package com.rumodigi.data.entity.mapper;
 import com.rumodigi.data.entity.CurrentlyData;
 import com.rumodigi.data.entity.ForecastData;
 import com.rumodigi.data.entity.HourlyData;
+import com.rumodigi.data.entity.HourlyForecastData;
 import com.rumodigi.domain.models.CurrentlyModel;
 import com.rumodigi.domain.models.ForecastModel;
+import com.rumodigi.domain.models.HourlyForecastModel;
 import com.rumodigi.domain.models.HourlyModel;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -46,8 +52,28 @@ public class ForecastDataMap {
          HourlyModel hourlyModel = null;
          if (hourlyData != null) {
              hourlyModel = new HourlyModel();
-             hourlyModel.setData(hourlyData.getData());
+             hourlyModel.setData(transformHourlyList(hourlyData.getData()));
          }
          return hourlyModel;
+    }
+
+    private List<HourlyForecastModel> transformHourlyList(Collection<HourlyForecastData> hourlyForecastData){
+        final List<HourlyForecastModel> hourlyForecastModelList = new ArrayList<>();
+        for(HourlyForecastData hourlyData : hourlyForecastData){
+            final HourlyForecastModel hourlyModel = transformHourlyForecastData(hourlyData);
+            if (hourlyModel != null){
+                hourlyForecastModelList.add(hourlyModel);
+            }
+        }
+        return hourlyForecastModelList;
+    }
+
+    private HourlyForecastModel transformHourlyForecastData(HourlyForecastData hourlyData){
+        HourlyForecastModel hourlyForecastModel = null;
+        if (hourlyData != null) {
+            hourlyForecastModel = new HourlyForecastModel();
+            hourlyForecastModel.setSummary(hourlyData.getSummary());
+        }
+        return hourlyForecastModel;
     }
 }
